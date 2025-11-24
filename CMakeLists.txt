@@ -9,7 +9,6 @@ set(SOURCE_FILES
 )
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
-add_subdirectory(src)
 
 target_include_directories(
   ${PROJECT_NAME} 
