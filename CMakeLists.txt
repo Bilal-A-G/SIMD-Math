@@ -12,7 +12,8 @@ add_library(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_include_directories(
   ${PROJECT_NAME} 
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
 target_link_libraries(
