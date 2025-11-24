@@ -1,4 +1,4 @@
-#include "vector4.hpp"
+#include "linear_algebra/vector4.hpp"
 
 Vector4::Vector4(float x, float y, float z, float w) {
 	this->x = x;
