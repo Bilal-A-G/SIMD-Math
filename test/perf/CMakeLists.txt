@@ -1,0 +1,1 @@
+SDMATH_CREATE_TEST(perf_vector4)
