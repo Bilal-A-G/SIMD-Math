@@ -7,6 +7,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(SOURCE_FILES 
 	src/linear_algebra/vector4.cpp
+	src/linear_algebra/matrix4x4.cpp
 )
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
