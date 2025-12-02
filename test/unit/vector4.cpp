@@ -66,11 +66,61 @@ static int Vector4AddTest() {
 	return error;
 }
 
+static int Vector4DotIsValid() {
+	int error = 0;
+	sdmath::Vector4 a = sdmath::Vector4(1,2,3,4);
+	sdmath::Vector4 b = sdmath::Vector4(1,2,0,0);
+	float result = a.Dot(b);
+	float expected_result = 5;
+	return std::abs(expected_result - result);
+}
+
+static int Vector4ScalarDivisionIsValid() {
+	int error = 0;
+	sdmath::Vector4 a = sdmath::Vector4(4,2,2,2);
+	float divisor = 2;
+	sdmath::Vector4 result = a/divisor;
+	float expected_x = 2;
+	float expected_rest = 1;
+	error += result.x - expected_x;
+	error += result.y - expected_rest;
+	error += result.z - expected_rest;
+	error += result.w - expected_rest;
+
+	return error;
+}
+
+static int Vector4NormalizationIsValid() {
+	int error = 0;
+	sdmath::Vector4 a = sdmath::Vector4(100,0,0,0);
+	sdmath::Vector4 normalized = a.Normalize();
+	sdmath::Vector4 expected_normalized = sdmath::Vector4(1,0,0,0);
+	error += (normalized - expected_normalized).Magnitude();
+
+	return error;
+}
+
+//Note, vector4 cross just computes the cross product of the first 3 elements, it ignores the w component, as 
+//the cross product is not defined in 4d
+static int Vector4CrossIsValid() {
+	int error = 0;
+	sdmath::Vector4 a = sdmath::Vector4(1,1,0,0);
+	sdmath::Vector4 b = sdmath::Vector4(2,2,2,0);
+	sdmath::Vector4 expected_result = sdmath::Vector4(2,-2,-0.2f,0);
+	sdmath::Vector4 actual_result = a.Cross(b);
+	error += (actual_result - expected_result).Magnitude();
+	return error;
+}
+
 int main (int argc, char *argv[]) {
 	int error = 0;
 	error += Vector4InitTest();
 	error += Vector4AddTest();
 	error += Vector4SubtractionValid();
 	error += Vector4MagnitudeValid();
+	error += Vector4DotIsValid();
+	error += Vector4ScalarDivisionIsValid();
+	error += Vector4NormalizationIsValid();
+	error += Vector4CrossIsValid();
 	return error;
 }

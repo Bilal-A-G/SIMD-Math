@@ -1,4 +1,3 @@
-//TODO: Add tests, then add the implementation for these functions
 #ifndef SIMDMATH_LINEAR_ALGEBRA_MATRIX4X4_H
 #define SIMDMATH_LINEAR_ALGEBRA_MATRIX4X4_H
 #include "sdmath/linear_algebra/vector4.hpp"
@@ -31,6 +30,8 @@ public:
 	*/
 	static Matrix4x4 LookAt(Vector4& eye, Vector4& center, Vector4& up);
 	static Matrix4x4 Perspective(float field_of_view, float aspect_ratio, float near_plane, float far_plane);
+
+	Matrix4x4 operator *(Matrix4x4& other);
 public:
 	Vector4 col0;
 	Vector4 col1;

@@ -83,6 +83,67 @@ static int Matrix4x4DefaultIsZeroMatrix() {
 	return std::abs(error);
 }
 
+static int Matrix4x4Matrix4x4MultiplicationValid() {
+	int error = 0;
+	sdmath::Matrix4x4 matrix_a = sdmath::Matrix4x4(sdmath::Vector4(2,1,1,1), sdmath::Vector4(3,2,2,2), sdmath::Vector4(2,3,2,1), sdmath::Vector4(1,4,3,5));
+	sdmath::Matrix4x4 matrix_b = sdmath::Matrix4x4(sdmath::Vector4(0.5f,1,10,1), sdmath::Vector4(2,9,9,2), sdmath::Vector4(2,0,5,1), sdmath::Vector4(2,5,3,5));
+	sdmath::Matrix4x4 result = matrix_a * matrix_b;
+
+	sdmath::Vector4 expected_col0 = sdmath::Vector4(25, 36.5f, 25.5f, 17.5f);
+	sdmath::Vector4 expected_col1 = sdmath::Vector4(51, 55, 44, 39);
+	sdmath::Vector4 expected_col2 = sdmath::Vector4(15, 21, 15, 12);
+	sdmath::Vector4 expected_col3 = sdmath::Vector4(30, 41, 33, 40);
+
+	sdmath::Vector4 actual_col0 = result.col0;
+	sdmath::Vector4 actual_col1 = result.col1;
+	sdmath::Vector4 actual_col2 = result.col2;
+	sdmath::Vector4 actual_col3 = result.col3;
+
+	std::cout << actual_col0.x << ", " << actual_col0.y << ", " << actual_col0.z << ", " << actual_col0.w << "\n";
+
+	error += (actual_col0 - expected_col0).Magnitude();
+	error += (actual_col1 - expected_col1).Magnitude();
+	error += (actual_col2 - expected_col2).Magnitude();
+	error += (actual_col3 - expected_col3).Magnitude();
+
+	return error;
+}
+
+static int Matrix4x4LookAtConstructorGeneratesCorrectMatrix() {
+	int error = 0;
+	sdmath::Vector4 eye = sdmath::Vector4(0, 0, 0, 0);
+	sdmath::Vector4 look_at = sdmath::Vector4(10,0,0,0);
+	sdmath::Vector4 up = sdmath::Vector4(0,1,0,0);
+	sdmath::Matrix4x4 matrix = sdmath::Matrix4x4::LookAt(eye, look_at, up);
+	sdmath::Matrix4x4 obj_original = sdmath::Matrix4x4::Identity();
+
+	sdmath::Matrix4x4 obj_view_space = matrix * obj_original;
+
+	sdmath::Vector4 expected_right = 	sdmath::Vector4(0,0,1,0);
+	sdmath::Vector4 expected_forward = sdmath::Vector4(1,0,0,0);
+	sdmath::Vector4 actual_right = obj_view_space.col0;
+	sdmath::Vector4 actual_up = obj_view_space.col1;
+	sdmath::Vector4 actual_forward = obj_view_space.col2;
+	error += (actual_right - expected_right).Magnitude();
+	error += (actual_forward - expected_forward).Magnitude();
+	error += (actual_up - up).Magnitude();
+
+	sdmath::Vector4 actual_position = obj_view_space.col3;
+	sdmath::Vector4 expected_position = sdmath::Vector4(0,0,0,1);
+
+	error += (actual_position - expected_position).Magnitude();
+	
+	return error;
+}
+
+//TODO: Figure out how to test this, we need to know how perspective projection works first before we can
+//Which is a lot more complex than the look at function
+//This is a good resource it seems: https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
+static int Matrix4x4PerspectiveConstructorGeneratesCorrectMatrix() {
+	int error = 0;
+	return 100;
+}
+
 static int Matrix4x4IdentityIsIdentityMatrix() {
 	sdmath::Matrix4x4 identity = sdmath::Matrix4x4::Identity();
 	int diagonal0 = identity.col0.x;
@@ -105,5 +166,8 @@ int main (int argc, char *argv[]) {
 	error += Matrix4x4CorrectlyInitializesUsingElementsConstructorInColumnMajorOrder();
 	error += Matrix4x4DefaultIsZeroMatrix();
 	error += Matrix4x4IdentityIsIdentityMatrix();
+	error += Matrix4x4Matrix4x4MultiplicationValid();
+	error += Matrix4x4LookAtConstructorGeneratesCorrectMatrix();
+	error += Matrix4x4PerspectiveConstructorGeneratesCorrectMatrix();
 	return error;
 }

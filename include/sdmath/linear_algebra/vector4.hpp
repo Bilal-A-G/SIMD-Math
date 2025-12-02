@@ -9,8 +9,14 @@ public:
 	//TODO: Make this have a non-simd version, make some kind of macro so we don't have to keep redoing the tests, it's very tedious, ie so
 	//we don't have duplicate tests for this and the non-simd version
 	Vector4 operator -(Vector4& other);
+	Vector4 operator /(float& other);
+	Vector4 operator /(float&& other);
 	Vector4 Add_NOSD(Vector4& other);
 	float Magnitude();
+	float Dot(Vector4& other);
+	//Calculated via the cofactor expansion method detailed here: https://www.wikihow.com/Calculate-the-Cross-Product-of-Two-Vectors
+	Vector4 Cross(Vector4& other);
+	Vector4 Normalize();
 	//Make this work, vector simd vector add on an array of arbitrary data with vectors in it,
 	//where the vectors are defined at every stride + sizeof(Vector4), starting at the offset
 	//AddVectors(void* data, int offset, int stride, int size, std::vector<Vector4> other);

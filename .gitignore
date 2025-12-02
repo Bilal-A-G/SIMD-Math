@@ -11,4 +11,6 @@ VTune/
 build/
 lib/
 .cache
+*.org
+*.org~
 compile_commands.json
