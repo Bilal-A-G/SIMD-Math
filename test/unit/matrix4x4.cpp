@@ -136,12 +136,30 @@ static int Matrix4x4LookAtConstructorGeneratesCorrectMatrix() {
 	return error;
 }
 
-//TODO: Figure out how to test this, we need to know how perspective projection works first before we can
-//Which is a lot more complex than the look at function
-//This is a good resource it seems: https://webglfundamentals.org/webgl/lessons/webgl-3d-perspective.html
+//Perspective division happens in the shader itself, when we set the gl_position variable, divides everything by the z coordinate of the vector4, so we are omiting that here
 static int Matrix4x4PerspectiveConstructorGeneratesCorrectMatrix() {
 	int error = 0;
-	return 100;
+	float field_of_view = 30;
+	int width = 1920;
+	int height = 1080;
+	float near_clipping_plane = 0.1f;
+	float far_clipping_plane = 1000.0f;
+	sdmath::Matrix4x4 perspective_matrix = sdmath::Matrix4x4::Perspective(height, width, field_of_view, near_clipping_plane, far_clipping_plane);
+	sdmath::Vector4 col0 = perspective_matrix.col0;
+	sdmath::Vector4 col1 = perspective_matrix.col1;
+	sdmath::Vector4 col2 = perspective_matrix.col2;
+	sdmath::Vector4 col3 = perspective_matrix.col3;
+
+	sdmath::Vector4 correct_col0 = sdmath::Vector4(-0.65713f, 0, 0, 0);
+	sdmath::Vector4 correct_col1 = sdmath::Vector4(0, -1.16823f, 0, 0);
+	sdmath::Vector4 correct_col2 = sdmath::Vector4(0, 0, 0.9f, 1);
+	sdmath::Vector4 correct_col3 = sdmath::Vector4(0, 0, -0.10001f, 0);
+
+	error += (col0 - correct_col0).Magnitude();
+	error += (col1 - correct_col1).Magnitude();
+	error += (col2- correct_col2).Magnitude();
+	error += (col3 - correct_col3).Magnitude();
+	return error;
 }
 
 static int Matrix4x4IdentityIsIdentityMatrix() {

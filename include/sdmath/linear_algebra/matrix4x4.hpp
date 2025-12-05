@@ -29,7 +29,8 @@ public:
 	 Up = up vector
 	*/
 	static Matrix4x4 LookAt(Vector4& eye, Vector4& center, Vector4& up);
-	static Matrix4x4 Perspective(float field_of_view, float aspect_ratio, float near_plane, float far_plane);
+	//TODO: Some kind of indication for unit, radians or degrees
+	static Matrix4x4 Perspective(int height, int width, float field_of_view, float near_plane, float far_plane);
 
 	Matrix4x4 operator *(Matrix4x4& other);
 public:

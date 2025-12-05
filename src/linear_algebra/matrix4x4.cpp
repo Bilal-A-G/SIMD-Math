@@ -1,5 +1,6 @@
 #include "sdmath/linear_algebra/matrix4x4.hpp"
 #include "sdmath/linear_algebra/vector4.hpp"
+#include <cmath>
 
 //TODO: Load the data into the class in a more optimal way, we can use SIMD for this
 sdmath::Matrix4x4::Matrix4x4(
@@ -72,4 +73,16 @@ sdmath::Matrix4x4 sdmath::Matrix4x4::LookAt(Vector4 &eye, Vector4 &center, Vecto
 	look_at_matrix.col2 = sdmath::Vector4(right.z, up.z, forward.z, 0.0f);
 	look_at_matrix.col3 = sdmath::Vector4(right.Dot(inverse_translation), up.Dot(inverse_translation), forward.Dot(inverse_translation), inverse_translation.w);
 	return look_at_matrix;
+}
+
+//Formula for the projection matrix comes from: https://www.youtube.com/watch?v=EqNcqBdrNyI
+sdmath::Matrix4x4 sdmath::Matrix4x4::Perspective(int height, int width, float field_of_view, float near_plane, float far_plane) {
+	sdmath::Matrix4x4 perspective_matrix = sdmath::Matrix4x4();
+	float aspect_ratio = height / static_cast<float>(width);
+	float fov_scaling_factor = 1.0f / std::tan(field_of_view / 2.0f);
+	perspective_matrix.col0 = sdmath::Vector4(aspect_ratio * fov_scaling_factor, 0.0f, 0.0f, 0.0f);
+	perspective_matrix.col1 = sdmath::Vector4(0.0f, fov_scaling_factor, 0.0f, 0.0f);
+	perspective_matrix.col2 = sdmath::Vector4(0.0f, 0.0f, far_plane / (far_plane - near_plane), 1.0f);
+	perspective_matrix.col3 = sdmath::Vector4(0.0f, 0.0f, -(far_plane * near_plane) / (far_plane - near_plane), 0.0f);
+	return perspective_matrix;
 }
